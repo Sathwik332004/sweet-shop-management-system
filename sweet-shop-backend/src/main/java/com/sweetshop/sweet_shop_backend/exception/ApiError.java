@@ -1,0 +1,6 @@
+package com.sweetshop.sweet_shop_backend.exception;
+
+import java.time.Instant;
+
+public record ApiError(Instant timestamp, int status, String error, String message, String path) {}
+

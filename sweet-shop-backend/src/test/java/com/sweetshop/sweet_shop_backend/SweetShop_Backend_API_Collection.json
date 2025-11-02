@@ -1,0 +1,115 @@
+{
+  "info": {
+    "name": "Sweet Shop Management System - Backend API",
+    "_postman_id": "a1eae457-7bfa-4cc4-9c74-9a432e8a1aaf",
+    "description": "Postman collection for Sweet Shop Management System (Spring Boot + MongoDB + JWT)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "http://localhost:8080/api/auth/register", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "auth", "register"] },
+            "body": { "mode": "raw", "raw": "{\n    \"email\": \"user1@sweetshop.com\",\n    \"password\": \"secret123\"\n}" }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "http://localhost:8080/api/auth/login", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "auth", "login"] },
+            "body": { "mode": "raw", "raw": "{\n    \"email\": \"user1@sweetshop.com\",\n    \"password\": \"secret123\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sweets",
+      "item": [
+        {
+          "name": "Get All Sweets",
+          "request": { "method": "GET", "url": { "raw": "http://localhost:8080/api/sweets" } }
+        },
+        {
+          "name": "Search by Name",
+          "request": { "method": "GET", "url": { "raw": "http://localhost:8080/api/sweets/search?name=Laddu" } }
+        },
+        {
+          "name": "Add New Sweet (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "http://localhost:8080/api/sweets" },
+            "body": { "mode": "raw", "raw": "{\n    \"name\": \"Rasgulla\",\n    \"category\": \"Milk\",\n    \"price\": 45,\n    \"quantity\": 100\n}" }
+          }
+        },
+        {
+          "name": "Update Sweet (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "http://localhost:8080/api/sweets/{{sweetId}}" },
+            "body": { "mode": "raw", "raw": "{\n    \"name\": \"Rasgulla\",\n    \"category\": \"Milk\",\n    \"price\": 50,\n    \"quantity\": 200\n}" }
+          }
+        },
+        {
+          "name": "Delete Sweet (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "http://localhost:8080/api/sweets/{{sweetId}}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inventory",
+      "item": [
+        {
+          "name": "Purchase Sweet (User)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "http://localhost:8080/api/sweets/{{sweetId}}/purchase" },
+            "body": { "mode": "raw", "raw": "{\n    \"quantity\": 2\n}" }
+          }
+        },
+        {
+          "name": "Restock Sweet (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": { "raw": "http://localhost:8080/api/sweets/{{sweetId}}/restock" },
+            "body": { "mode": "raw", "raw": "{\n    \"quantity\": 50\n}" }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "token", "value": "" },
+    { "key": "sweetId", "value": "" }
+  ]
+}
