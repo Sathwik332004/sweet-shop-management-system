@@ -36,7 +36,6 @@ export default function AdminPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [open, setOpen] = useState(false);
 
-  // ✅ Load sweets or search
   const loadSweets = async (query) => {
     try {
       const res = query ? await searchSweets({ name: query }) : await getSweets();
@@ -51,20 +50,16 @@ export default function AdminPage() {
     return () => clearTimeout(delay);
   }, [searchQuery]);
 
-  // ✅ Add Sweet
   const handleAdd = async (e) => {
     e.preventDefault();
     const newSweetName = form.name.trim();
-
     if (!newSweetName) {
       toast.error("Sweet name cannot be empty!");
       return;
     }
-
     const sweetExists = sweets.some(
       (sweet) => sweet.name.toLowerCase() === newSweetName.toLowerCase()
     );
-
     if (sweetExists) {
       toast.error(`Sweet "${newSweetName}" already exists! 🍬`);
       return;
@@ -84,7 +79,6 @@ export default function AdminPage() {
     }
   };
 
-  // ✅ Update Sweet
   const handleEdit = async (e) => {
     e.preventDefault();
     try {
@@ -102,17 +96,18 @@ export default function AdminPage() {
   };
 
   const handleDelete = async (id) => {
-  try {
-    await deleteSweet(id);
-    loadSweets();
-    toast.success("Sweet deleted 🗑️");
-  } catch {
-    toast.error("Failed to delete sweet ⚠️");
-  }
-};
+    try {
+      await deleteSweet(id);
+      loadSweets();
+      toast.success("Sweet deleted 🗑️");
+    } catch {
+      toast.error("Failed to delete sweet ⚠️");
+    }
+  };
 
   return (
     <Box sx={{ color: "#fff" }}>
+      {/* 🔝 Header Section */}
       <Box
         sx={{
           display: "flex",
@@ -123,7 +118,10 @@ export default function AdminPage() {
           gap: 2,
         }}
       >
-        <Typography variant="h5" sx={{ fontWeight: "bold", color: "#669928" }}>
+        <Typography
+          variant="h5"
+          sx={{ fontWeight: "bold", color: "#669928", letterSpacing: 0.5 }}
+        >
           Sweet Shop Admin Dashboard 🍭
         </Typography>
 
@@ -187,22 +185,40 @@ export default function AdminPage() {
               }}
             >
               <CardContent>
-                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                {/* ✅ Sweet Name */}
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: 700,
+                    color: "#669928",
+                    mb: 0.5,
+                    textTransform: "capitalize",
+                  }}
+                >
                   {s.name}
                 </Typography>
-                <Typography variant="body2" color="#bbb">
+
+                <Typography variant="body2" sx={{ color: "#bbb", mb: 1 }}>
                   {s.category}
                 </Typography>
-                <Box sx={{ mt: 1 }}>
-                  <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                    ₹{s.price}
-                  </Typography>
-                  <Typography variant="body2" color="#aaa">
-                    Stock: {s.quantity}
-                  </Typography>
-                </Box>
 
-                {/* Action buttons */}
+                {/* ✅ Sweet Price */}
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: "#669928",
+                    fontWeight: 600,
+                    mb: 0.5,
+                  }}
+                >
+                  ₹{s.price}
+                </Typography>
+
+                <Typography variant="body2" color="#aaa">
+                  Stock: {s.quantity}
+                </Typography>
+
+                {/* 🧰 Action Buttons */}
                 <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
                   <IconButton
                     color="success"
@@ -214,7 +230,12 @@ export default function AdminPage() {
                   <IconButton
                     color="warning"
                     size="small"
-                    onClick={() => restock(s.id, 10).then(loadSweets)}
+                    onClick={() =>
+                      restock(s.id, 10)
+                        .then(loadSweets)
+                        .then(() => toast.success("Restocked 10 items 📦"))
+                        .catch(() => toast.error("Failed to restock"))
+                    }
                   >
                     <InventoryIcon />
                   </IconButton>
@@ -232,6 +253,7 @@ export default function AdminPage() {
         ))}
       </Grid>
 
+      {/* Dialogs unchanged */}
       {/* 🪄 Add Sweet Dialog */}
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Add New Sweet</DialogTitle>
@@ -241,32 +263,10 @@ export default function AdminPage() {
             onSubmit={handleAdd}
             sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
           >
-            <TextField
-              label="Name"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              fullWidth
-            />
-            <TextField
-              label="Category"
-              value={form.category}
-              onChange={(e) => setForm({ ...form, category: e.target.value })}
-              fullWidth
-            />
-            <TextField
-              label="Price"
-              type="number"
-              value={form.price}
-              onChange={(e) => setForm({ ...form, price: e.target.value })}
-              fullWidth
-            />
-            <TextField
-              label="Quantity"
-              type="number"
-              value={form.quantity}
-              onChange={(e) => setForm({ ...form, quantity: e.target.value })}
-              fullWidth
-            />
+            <TextField label="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} fullWidth />
+            <TextField label="Category" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} fullWidth />
+            <TextField label="Price" type="number" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} fullWidth />
+            <TextField label="Quantity" type="number" value={form.quantity} onChange={(e) => setForm({ ...form, quantity: e.target.value })} fullWidth />
             <DialogActions>
               <Button onClick={() => setOpen(false)}>Cancel</Button>
               <Button type="submit" variant="contained" color="success">
@@ -287,36 +287,10 @@ export default function AdminPage() {
               onSubmit={handleEdit}
               sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
             >
-              <TextField
-                label="Name"
-                value={editForm.name}
-                onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                fullWidth
-              />
-              <TextField
-                label="Category"
-                value={editForm.category}
-                onChange={(e) =>
-                  setEditForm({ ...editForm, category: e.target.value })
-                }
-                fullWidth
-              />
-              <TextField
-                label="Price"
-                type="number"
-                value={editForm.price}
-                onChange={(e) => setEditForm({ ...editForm, price: e.target.value })}
-                fullWidth
-              />
-              <TextField
-                label="Quantity"
-                type="number"
-                value={editForm.quantity}
-                onChange={(e) =>
-                  setEditForm({ ...editForm, quantity: e.target.value })
-                }
-                fullWidth
-              />
+              <TextField label="Name" value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} fullWidth />
+              <TextField label="Category" value={editForm.category} onChange={(e) => setEditForm({ ...editForm, category: e.target.value })} fullWidth />
+              <TextField label="Price" type="number" value={editForm.price} onChange={(e) => setEditForm({ ...editForm, price: e.target.value })} fullWidth />
+              <TextField label="Quantity" type="number" value={editForm.quantity} onChange={(e) => setEditForm({ ...editForm, quantity: e.target.value })} fullWidth />
               <DialogActions>
                 <Button onClick={() => setEditForm(null)}>Cancel</Button>
                 <Button type="submit" variant="contained" color="primary">
