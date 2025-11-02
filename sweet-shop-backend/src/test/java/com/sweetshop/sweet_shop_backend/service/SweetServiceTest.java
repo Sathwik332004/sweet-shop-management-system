@@ -3,6 +3,9 @@ package com.sweetshop.sweet_shop_backend.service;
 import com.sweetshop.sweet_shop_backend.domain.Sweet;
 import com.sweetshop.sweet_shop_backend.dto.SweetRequest;
 import com.sweetshop.sweet_shop_backend.repository.SweetRepository;
+
+import lombok.RequiredArgsConstructor;
+
 import com.sweetshop.sweet_shop_backend.exception.NotFoundException;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -115,7 +119,5 @@ class SweetServiceTest {
         // Act & Assert
         assertThrows(IllegalStateException.class, () -> service.purchase("1", 10));
     }
-
-
 
 }

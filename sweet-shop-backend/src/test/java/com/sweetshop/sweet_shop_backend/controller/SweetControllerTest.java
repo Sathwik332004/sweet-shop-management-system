@@ -6,7 +6,8 @@ import com.sweetshop.sweet_shop_backend.service.SweetService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -16,17 +17,18 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(SweetController.class)
+@SpringBootTest // ✅ Load full Spring context (fixes missing beans)
+@AutoConfigureMockMvc // ✅ Auto-configures MockMvc for testing
 class SweetControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private SweetService sweetService;
+    private SweetService sweetService; // ✅ Mock only this layer
 
     @Autowired
     private ObjectMapper objectMapper;
