@@ -17,6 +17,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -89,5 +90,32 @@ class SweetServiceTest {
         assertEquals(70, updated.getQuantity());
         verify(repo).save(existing);
     }
+
+    @Test
+    void purchaseShouldDecreaseQuantityWhenEnoughStock() {
+        // Arrange
+        Sweet existing = new Sweet("1", "Laddu", "Traditional", 25.0, 50);
+        when(repo.findById("1")).thenReturn(Optional.of(existing));
+        when(repo.save(any(Sweet.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        // Act
+        Sweet updated = service.purchase("1", 10);
+
+        // Assert
+        assertEquals(40, updated.getQuantity());
+        verify(repo).save(existing);
+    }
+
+    @Test
+    void purchaseShouldThrowExceptionWhenOutOfStock() {
+        // Arrange
+        Sweet existing = new Sweet("1", "Laddu", "Traditional", 25.0, 5);
+        when(repo.findById("1")).thenReturn(Optional.of(existing));
+
+        // Act & Assert
+        assertThrows(IllegalStateException.class, () -> service.purchase("1", 10));
+    }
+
+
 
 }
