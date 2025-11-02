@@ -37,15 +37,32 @@ public class SweetService {
   public void delete(String id){ repo.deleteById(id); }
 
   public Sweet restock(String id, int quantity) {
-    var sweet = repo.findById(id)
-        .orElseThrow(() -> new NotFoundException("Sweet not found"));
+      var sweet = repo.findById(id)
+          .orElseThrow(() -> new NotFoundException("Sweet not found"));
 
-    if (quantity <= 0) {
-        throw new IllegalArgumentException("Quantity must be positive");
-    }
+      if (quantity <= 0) {
+          throw new IllegalArgumentException("Quantity must be positive");
+      }
 
-    sweet.setQuantity(sweet.getQuantity() + quantity);
-    return repo.save(sweet);
-}
+      sweet.setQuantity(sweet.getQuantity() + quantity);
+      return repo.save(sweet);
+  }
+
+  public Sweet purchase(String id, int quantity) {
+      var sweet = repo.findById(id)
+          .orElseThrow(() -> new NotFoundException("Sweet not found"));
+
+      if (quantity <= 0) {
+          throw new IllegalArgumentException("Quantity must be positive");
+      }
+
+      if (sweet.getQuantity() < quantity) {
+          throw new IllegalStateException("Out of stock");
+      }
+
+      sweet.setQuantity(sweet.getQuantity() - quantity);
+      return repo.save(sweet);
+  }
+
 
 }
