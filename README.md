@@ -36,7 +36,7 @@ This project integrates **AI-assisted workflows** to improve development and mai
 - Manage sweets (Add, Update, Delete)
 - Manage users and roles
 - Track inventory and purchases
-- Admin Credential [As per now we can edit role in database only by default all the users role is set to "USET".In database we can chage role.]
+- Admin Credential [As per now we can edit role in database only by default all the users role is set to "USER".In database we can chage role.]
   ```palintext
      admin@sweetshop.com
   ```
