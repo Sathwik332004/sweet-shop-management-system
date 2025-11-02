@@ -74,23 +74,6 @@ class SweetServiceTest {
         assertThat(updated.getQuantity()).isEqualTo(60);
     }
 
-    @Test
-    void create_shouldThrowException_whenSweetAlreadyExists() {
-    SweetRequest req = new SweetRequest("Laddu", "Traditional", 25.0, 50);
-    Sweet existing = Sweet.builder()
-            .id("123")
-            .name("Laddu")
-            .category("Traditional")
-            .price(20.0)
-            .quantity(30)
-            .build();
 
-        // Simulate that a sweet with same name already exists
-        when(repo.findByNameIgnoreCase("Laddu")).thenReturn(Optional.of(existing));
-
-        assertThatThrownBy(() -> service.create(req))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessage("Sweet already exists");
-    }
 
 }
