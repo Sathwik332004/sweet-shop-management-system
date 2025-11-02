@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -74,6 +75,19 @@ class SweetServiceTest {
         assertThat(updated.getQuantity()).isEqualTo(60);
     }
 
+    @Test
+    void restockShouldIncreaseQuantityWhenSweetExists() {
+        // Arrange
+        Sweet existing = new Sweet("1", "Laddu", "Traditional", 25.0, 50);
+        when(repo.findById("1")).thenReturn(Optional.of(existing));
+        when(repo.save(any(Sweet.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
+        // Act
+        Sweet updated = service.restock("1", 20);
+
+        // Assert
+        assertEquals(70, updated.getQuantity());
+        verify(repo).save(existing);
+    }
 
 }
