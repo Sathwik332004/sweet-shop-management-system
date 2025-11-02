@@ -10,7 +10,7 @@ It provides an admin dashboard for managing sweets and users, and a customer-fac
 This system is built with:
 - 🧩 **Spring Boot (Backend)** — REST APIs, Security, and MongoDB integration.
 - ⚛️ **React + Vite (Frontend)** — Modern UI for admin and users.
-- 🍃 **MongoDB (Database)** — NoSQL database for managing sweets and users.
+- 🍃 **MongoDB Atlas (Database)** — NoSQL database for managing sweets and users.
 
 ---
 
@@ -36,6 +36,13 @@ This project integrates **AI-assisted workflows** to improve development and mai
 - Manage sweets (Add, Update, Delete)
 - Manage users and roles
 - Track inventory and purchases
+- Admin Credential [As per now we can edit role in database only by default all the users role is set to "USET".In database we can chage role.]
+  ```palintext
+     admin@sweetshop.com
+  ```
+  ```palintext
+     admin123
+  ```
 
 ### 🧑‍🤝‍🧑 Customer
 - Register and Login securely (JWT)
