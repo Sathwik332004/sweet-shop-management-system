@@ -21,6 +21,8 @@ export default function AuthProvider({ children }) {
   const signOut = () => {
     localStorage.clear();
     setUser(null);
+    toast.success("Logged out successfully 👋");
+    navigate("/login");
   };
 
   return (
